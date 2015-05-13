@@ -79,36 +79,42 @@ function getStops (step, callback) {
   xmlhttp.send();
 }
 
-function getApproachingVehicle (step, callback) {
+function getVehicles (step, callback) {
   httpGet("bus/patterns?rt="+step.rt, function (response) {
     var patterns = JSON.parse(response)["bustime-response"].ptr;
     console.log("patterns:")
     console.log(patterns);
-    var pids = getPatterns(patterns, step.direction);
+    patterns = filterPattern(patterns, step);
     
     httpGet("bus/vehicles?rt="+step.rt, function (response) {
       var vehicles = JSON.parse(response)["bustime-response"].vehicle;
-      vehicles = approachingVehicles(vehicles, pids);
-      var vehicle = getNearestVechile(vehicles, step.transit.departure_stop.location);
-      console.log("vehicle:");
-      console.log(vehicle);
+      console.log("vehicles");
+      console.log(vehicles);
+
+      vehicles = vehiclesMatched(vehicles, patterns);
       if (callback) {
-        callback(vehicle);
+        callback(vehicles);
       };
     });
   });
 }
 
-function approachingVehicles (vehicles, pids) {
-  var approachingVehicles = [];
+function vehiclesMatched (vehicles, patterns) {
+  var pids = {};
+  for (var i = 0; i < patterns.length; i++) {
+    pids[patterns[i].pid] = true;
+  };
+
+  var vehiclesMatched = [];
   for (var i = 0; i < vehicles.length; i++) {
     if (vehicles[i].pid in pids) {
-      approachingVehicles[approachingVehicles.length] = vehicles[i];
+      vehicles[i].latLng = new google.maps.LatLng(vehicles[i].lat, vehicles[i].lon);
+      vehiclesMatched[vehiclesMatched.length] = vehicles[i];
     };
   };
-  console.log("approachingVehicles:");
-  console.log(approachingVehicles);
-  return approachingVehicles;
+  console.log("vehiclesMatched:");
+  console.log(vehiclesMatched);
+  return vehiclesMatched;
 }
 
 function getNearestVechile (vehicles, myLatLng) {
@@ -128,16 +134,36 @@ function getNearestVechile (vehicles, myLatLng) {
   return nearestVehicle;
 }
 
-function getPatterns (patterns, dir) {
-  var pids = new Object();
+function filterPattern (patterns, step) {
+  var validPatterns = [];
   for (var i = 0; i < patterns.length; i++) {
-    if (patterns[i].rtdir == dir) {
-      pids[patterns[i].pid] = true;
+    if (patterns[i].rtdir != step.direction) {
+      continue;
+    };
+    patterns[i].pt = getPatternStops(patterns[i].pt);
+    var begin = findStop(patterns[i].pt, step.transit.departure_stop.location);
+    var end = findStop(patterns[i].pt, step.transit.arrival_stop.location);
+    if (begin < end) {
+      patterns[i].departIndex = begin;
+      patterns[i].arrivalIndex = end;
+      validPatterns[validPatterns.length] = patterns[i];
     };
   };
-  console.log("pids:");
-  console.log(pids);
-  return pids;
+  console.log("validPatterns:");
+  console.log(validPatterns);
+  return validPatterns;
+}
+
+function getPatternStops (patternPoints) {
+  var patternStops = [];
+  for (var i = 0; i < patternPoints.length; i++) {
+    if (patternPoints[i].typ == "S") {
+      patternStops[patternStops.length] = patternPoints[i];
+    };
+  };
+  console.log("patternStops:");
+  console.log(patternStops);
+  return patternStops;
 }
 
 function httpGet (url, callback) {
@@ -163,17 +189,20 @@ function distanceSquare (latLng1, latLng2) {
 
 function findStop (stops, latLng) {
   var minDistance;
-  var stop;
+  var stopIndex;
   for (var i = 0; i < stops.length; i++) {
+    if (stops[i].typ != "S") {
+      continue;
+    };
     var distance = distanceSquare(new google.maps.LatLng(stops[i].lat, stops[i].lon), latLng);
     if (!minDistance || minDistance > distance) {
       minDistance = distance;
-      stop = i;
+      stopIndex = i;
     };
   };
   console.log("stopIndex:");
-  console.log(stop);
-  return stop;
+  console.log(stopIndex);
+  return stopIndex;
 }
 
 function stopsBetween (stops, startLatLng, endLatLng) {
