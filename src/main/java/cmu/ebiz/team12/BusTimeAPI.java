@@ -36,6 +36,8 @@ public class BusTimeAPI extends HttpServlet {
 				"http://truetime.portauthority.org/bustime/api/v1/getvehicles");
 		API_URLS.put("predictions",
 				"http://truetime.portauthority.org/bustime/api/v1/getpredictions");
+		API_URLS.put("patterns",
+				"http://truetime.portauthority.org/bustime/api/v1/getpatterns");
 	}
 
 	@Override
@@ -62,21 +64,15 @@ public class BusTimeAPI extends HttpServlet {
 		Util.log("queryString = ", queryString);
 
 		String xml = Http.get(url + queryString);
-		xml = replaceInvalidChars(xml);
 		JSONObject jsonObject = null;
 		String jsonString = null;
 		try {
 			jsonObject = XML.toJSONObject(xml);
 			jsonString = jsonObject.toString(4);
-			Util.log("jsonString = ", jsonString);
 			resp.getWriter().println(jsonString);
 		} catch (JSONException je) {
 			Util.log(je);
 		}
-	}
-
-	private String replaceInvalidChars(String xml) {
-		return xml.replaceAll("-", "_");
 	}
 
 	@Override

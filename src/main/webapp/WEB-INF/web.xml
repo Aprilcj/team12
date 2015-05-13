@@ -6,7 +6,7 @@
 	<display-name>server</display-name>
 	<servlet>
 		<servlet-name>BusTimeAPI</servlet-name>
-		<servlet-class>edu.cmu.cs.ebusiness.team12.BusTimeAPI</servlet-class>
+		<servlet-class>cmu.ebiz.team12.BusTimeAPI</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

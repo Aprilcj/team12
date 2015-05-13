@@ -27,14 +27,10 @@
 var directionsDisplay;
 var directionsService = new google.maps.DirectionsService();
 var map;
-var vehicleMarker;
-var stopMarkers = [];
 var places = new Object();
 places.cmu = new google.maps.LatLng(40.4427798, -79.9423143);
 places.ikea = new google.maps.LatLng(40.451962,-80.168149);
 places.giantEagle = new google.maps.LatLng(40.411437919404,-79.908427395504);
-places.pnc = new google.maps.LatLng(40.446549, -79.948646);
-places.schenleyPark = new google.maps.LatLng(40.432292, -79.946203);
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
@@ -52,40 +48,10 @@ function calcRoute() {
   if (start == end) {
     return;
   };
-
-  //draw a route
-  getRoute(places[start], places[end], function(route) {
-    // display on map
-    directionsDisplay.setDirections(route);
-
-    var step = getFirstTransitStep(route);
-    getStops(step, function (stops) {
-      for (var i = 0; i < stopMarkers.length; i++) {
-        stopMarkers[i].setMap(null);
-      };
-      stopMarkers = [];
-      for (var i = 0; i < stops.length; i++) {
-        stopMarkers[stopMarkers.length] = new google.maps.Marker({
-            position: stops[i].latLng,
-            icon:"images/black-dot.png",
-            title:stops[i].stpnm
-        });
-        stopMarkers[stopMarkers.length-1].setMap(map);
-      };
-    });
-
-    //draw approaching vehicle
-    getApproachingVehicle(step, function(vehicle){
-      if (vehicleMarker) {
-        vehicleMarker.setMap(null);
-      }
-      vehicleMarker = new google.maps.Marker({
-          position: vehicle.latLng,
-          icon: "images/red-dot.png",
-          title:vehicle.rt
-      });
-      vehicleMarker.setMap(map);
-    });
+  getRoute(places[start], places[end], function(routes) {
+    directionsDisplay.setDirections(routes);
+    var bus = getBuses(routes)[0];
+    console.log(bus);
   });
 }
 
@@ -100,16 +66,12 @@ google.maps.event.addDomListener(window, 'load', initialize);
       <option value="cmu">cmu</option>
       <option value="ikea">ikea</option>
       <option value="giantEagle">giantEagle</option>
-      <option value="pnc">pnc</option>
-      <option value="schenleyPark">schenleyPark</option>
     </select>
     <b>End: </b>
     <select id="end" onchange="calcRoute();">
       <option value="cmu">cmu</option>
       <option value="ikea">ikea</option>
       <option value="giantEagle">giantEagle</option>
-      <option value="pnc">pnc</option>
-      <option value="schenleyPark">schenleyPark</option>
     </select>
     </div>
     <div id="map-canvas"></div>
