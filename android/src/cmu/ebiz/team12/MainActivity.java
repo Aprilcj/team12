@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -14,7 +17,16 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		WebView webview = (WebView) findViewById(R.id.webview);
-		webview.loadUrl("file:///android_asset/map.html");
+		webview.loadUrl("http://mobileapp-ebiz2015.rhcloud.com/map.html");
+		webview.getSettings().setJavaScriptEnabled(true);
+		webview.setWebChromeClient(new WebChromeClient(){
+			
+		});
+		webview.setWebViewClient(new WebViewClient() {
+		   public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+		     Toast.makeText(MainActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+		   }
+		});
 	}
 
 	@Override
