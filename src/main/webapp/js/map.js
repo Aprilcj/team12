@@ -56,7 +56,7 @@ function getDirection (step) {
 
 function getStops (step, callback) {
   var xmlhttp = new XMLHttpRequest();
-  var url = "bus/stops?rt="+step.rt+"&dir="+step.direction;
+  var url = "/mobile/bus/stops?rt="+step.rt+"&dir="+step.direction;
 
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -80,7 +80,7 @@ function getStops (step, callback) {
 }
 
 function getVehicles (step, callback) {
-  httpGet("bus/patterns?rt="+step.rt, function (response) {
+  httpGet("/mobile/bus/patterns?rt="+step.rt, function (response) {
     var patterns = JSON.parse(response)["bustime-response"].ptr;
     console.log("patterns:")
     console.log(patterns);
@@ -100,7 +100,7 @@ function getVehicles (step, callback) {
 }
 
 function getVehicle (step, callback) {
-  httpGet("bus/patterns?rt="+step.rt, function (response) {
+  httpGet("/mobile/bus/patterns?rt="+step.rt, function (response) {
     var patterns = JSON.parse(response)["bustime-response"].ptr;
     console.log("patterns:")
     console.log(patterns);

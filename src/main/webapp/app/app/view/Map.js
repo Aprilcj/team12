@@ -13,16 +13,23 @@ Ext.define('MyMapApp.view.Map', {
 
     listeners: {
          maprender : function(comp, map) {
-            //var pos = new google.maps.LatLng (40.445703, -79.961782);
-            gMap = map;
             console.log('render map');
+            gMap = map;
+
+            this.fireEvent('initText');
+
+            var input = document.getElementById('searchTextField');
+            input.value = text;
+            this.getMain().setActiveItem(2);
+
+            var cmu = new google.maps.LatLng(40.4427798, -79.9423143);
             marker = new google.maps.Marker({
                 animation: google.maps.Animation.DROP,
                 title: 'test',
-                position: map.center,
+                position: cmu,
                 map: map
             });
-            map.panTo(map.center);
+            map.panTo(cmu);
         }
     }
 
