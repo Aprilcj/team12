@@ -117,19 +117,29 @@ function vehiclesMatched (vehicles, patterns) {
   return vehiclesMatched;
 }
 
-function getNearestVechile (vehicles, myLatLng) {
+function nearestVehicle (vehicles, patterns) {
+  var pids = {};
+  for (var i = 0; i < patterns.length; i++) {
+    pids[patterns[i].pid] = true;
+  };
+
   var nearestVehicle;
   var minDistance;
   for (var i = 0; i < vehicles.length; i++) {
-    var vehicleLatLng = new google.maps.LatLng(vehicles[i].lat, vehicles[i].lon);
-    var distance = distanceSquare(myLatLng, vehicleLatLng);
-    if (!minDistance || distance < minDistance) {
-      minDistance = distance;
-      nearestVehicle = vehicles[i];
-      nearestVehicle.latLng = vehicleLatLng;
+    for (var j = 0; j < patterns.length; j++) {
+      if (patterns[j].pid == vehicles[i].pid) {
+        var distance =  patterns[i].pt[patterns[i].departIndex].pdist - vehicles[i].pdist;
+        if (distance < 0) {
+          continue;
+        }
+        if (!minDistance || distance < minDistance) {
+          minDistance = distance;
+          nearestVehicle = vehicles[i];
+        };
+      };
     };
   };
-  console.log("nearestVehicle:")
+  console.log("nearestVehicle:");
   console.log(nearestVehicle);
   return nearestVehicle;
 }

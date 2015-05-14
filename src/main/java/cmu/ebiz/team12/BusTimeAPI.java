@@ -43,6 +43,8 @@ public class BusTimeAPI extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		//as for http://host/bus/stops?rt=61D&dir=INBOUND
+		// action = /stops
 		String action = req.getPathInfo();
 		if (action != null && action.startsWith("/")) {
 			action = action.substring(1);
