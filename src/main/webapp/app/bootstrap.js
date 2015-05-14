@@ -659,7 +659,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "MyMapApp.controller.Main": [],
   "MyMapApp.view.Favorite": [],
   "MyMapApp.view.Main": [],
-  "MyMapApp.view.Map": []
+  "MyMapApp.view.Map": [],
+  "MyMapApp.view.Plan": []
 });
 
 Ext.ClassManager.addNameAliasMappings({
@@ -1389,6 +1390,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "MyMapApp.view.Map": [
     "widget.mymap"
+  ],
+  "MyMapApp.view.Plan": [
+    "widget.plan"
   ]
 });
 

@@ -12,7 +12,7 @@ Ext.define('MyMapApp.controller.Main', {
         refs: {
             main: 'main',
             fav: 'myfav',
-            test: 'myfav button'
+            test: 'myfav > fieldset'
         },
         control: {
             test: {

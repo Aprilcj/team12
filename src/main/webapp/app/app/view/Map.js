@@ -2,36 +2,45 @@ Ext.define('MyMapApp.view.Map', {
     extend: 'Ext.Map',
     alias: 'widget.mymap',
 
+    id: 'x1',
+
     config: {
           mapOptions: {
              mapTypeId: google.maps.MapTypeId.ROADMAP,
              zoom: 15
          },
-        //useCurrentLocation: true,
+        useCurrentLocation: true,
     },
-    
+
 
     listeners: {
          maprender : function(comp, map) {
-            console.log('render map');
-            gMap = map;
-
-            this.fireEvent('initText');
-
-            var input = document.getElementById('searchTextField');
-            input.value = text;
-            this.getMain().setActiveItem(2);
-
-            var cmu = new google.maps.LatLng(40.4427798, -79.9423143);
+            var pos = new google.maps.LatLng (40.442382, -79.942494);
+            MyMapApp.view.gMap = map;
             marker = new google.maps.Marker({
                 animation: google.maps.Animation.DROP,
-                title: 'test',
-                position: cmu,
+                position: pos,
                 map: map
             });
-            map.panTo(cmu);
+            
+            console.log('add marker');
+             directionsDisplay = new google.maps.DirectionsRenderer();
+             directionsService = new google.maps.DirectionsService();
+             directionsDisplay.setMap(map);
+
+             request = {
+              origin: new google.maps.LatLng(40.442382, -79.942494),
+              destination: new google.maps.LatLng(40.455136, -79.921186),
+              travelMode: google.maps.TravelMode.TRANSIT
+            };
+            directionsService.route(request, function(result, status) {
+              if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(result);
+              }
+            });
+            console.log('add route');
         }
-    }
+    },
 
 });
 
