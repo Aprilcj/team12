@@ -75,20 +75,34 @@ function calcRoute() {
     });
 
     //draw approaching vehicle
-    getVehicles(step, function(vehicles){
+    // getVehicles(step, function(vehicles){
+    //   for (var i = 0; i < vehicleMarkers.length; i++) {
+    //     vehicleMarkers[i].setMap(null);
+    //   };
+    //   vehicleMarkers = [];
+    //   for (var i = 0; i < vehicles.length; i++) {
+    //     vehicleMarkers[vehicleMarkers.length] = new google.maps.Marker({
+    //         position: vehicles[i].latLng,
+    //         icon: "images/red-dot.png",
+    //         title:vehicles[i].rt
+    //     });
+    //     vehicleMarkers[vehicleMarkers.length-1].setMap(map);
+    //   };
+    // });
+
+    getVehicle(step, function(vehicle){
       for (var i = 0; i < vehicleMarkers.length; i++) {
         vehicleMarkers[i].setMap(null);
       };
       vehicleMarkers = [];
-      for (var i = 0; i < vehicles.length; i++) {
-        vehicleMarkers[vehicleMarkers.length] = new google.maps.Marker({
-            position: vehicles[i].latLng,
-            icon: "images/red-dot.png",
-            title:vehicles[i].rt
-        });
-        vehicleMarkers[vehicleMarkers.length-1].setMap(map);
-      };
+      vehicleMarkers[vehicleMarkers.length] = new google.maps.Marker({
+          position: vehicle.latLng,
+          icon: "images/red-dot.png",
+          title:vehicle.rt
+      });
+      vehicleMarkers[vehicleMarkers.length-1].setMap(map);
     });
+
   });
 }
 

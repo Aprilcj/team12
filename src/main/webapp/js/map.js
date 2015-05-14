@@ -99,6 +99,26 @@ function getVehicles (step, callback) {
   });
 }
 
+function getVehicle (step, callback) {
+  httpGet("bus/patterns?rt="+step.rt, function (response) {
+    var patterns = JSON.parse(response)["bustime-response"].ptr;
+    console.log("patterns:")
+    console.log(patterns);
+    patterns = filterPattern(patterns, step);
+    
+    httpGet("bus/vehicles?rt="+step.rt, function (response) {
+      var vehicles = JSON.parse(response)["bustime-response"].vehicle;
+      console.log("vehicles");
+      console.log(vehicles);
+
+      var vehicle = nearestVehicle(vehicles, patterns);
+      if (callback) {
+        callback(vehicle);
+      };
+    });
+  });
+}
+
 function vehiclesMatched (vehicles, patterns) {
   var pids = {};
   for (var i = 0; i < patterns.length; i++) {
@@ -128,13 +148,18 @@ function nearestVehicle (vehicles, patterns) {
   for (var i = 0; i < vehicles.length; i++) {
     for (var j = 0; j < patterns.length; j++) {
       if (patterns[j].pid == vehicles[i].pid) {
-        var distance =  patterns[i].pt[patterns[i].departIndex].pdist - vehicles[i].pdist;
+        if (!patterns[j].departIndex) {
+          break;
+        };
+        var distance =  patterns[j].pt[patterns[j].departIndex].pdist - vehicles[i].pdist;
         if (distance < 0) {
           continue;
         }
+        console.log("distance = " + distance + ", minDistance = " + minDistance);
         if (!minDistance || distance < minDistance) {
           minDistance = distance;
           nearestVehicle = vehicles[i];
+          nearestVehicle.latLng = new google.maps.LatLng(nearestVehicle.lat, nearestVehicle.lon);
         };
       };
     };
