@@ -86,7 +86,7 @@ function getVehicles (step, callback) {
     console.log(patterns);
     patterns = filterPattern(patterns, step);
     
-    httpGet("bus/vehicles?rt="+step.rt, function (response) {
+    httpGet("/mobile/bus/vehicles?rt="+step.rt, function (response) {
       var vehicles = JSON.parse(response)["bustime-response"].vehicle;
       console.log("vehicles");
       console.log(vehicles);
@@ -106,7 +106,7 @@ function getVehicle (step, callback) {
     console.log(patterns);
     patterns = filterPattern(patterns, step);
     
-    httpGet("bus/vehicles?rt="+step.rt, function (response) {
+    httpGet("/mobile/bus/vehicles?rt="+step.rt, function (response) {
       var vehicles = JSON.parse(response)["bustime-response"].vehicle;
       console.log("vehicles");
       console.log(vehicles);
@@ -251,4 +251,23 @@ function stopsBetween (stops, startLatLng, endLatLng) {
     validStops = stops.slice(begin, end+1);
   }
   return validStops;
+}
+
+function getVehicleLocation (patterns, vid, callback) {
+  httpGet("/mobile/bus/predictions?vid="+vid, function (response) {
+    var predictions = JSON.parse(response)["bustime-response"].prd;
+    console.log("predictions");
+    console.log(predictions);
+
+    for (var i = 0; i < predictions.length; i++) {
+      for (var j = 0; j < patterns.length; j++) {
+        if (patterns[j].pt[patterns[j].departIndex].stpid == predictions[i].stpid) {
+          if (callback) {
+            callback(predictions[i]);
+          };
+          return;
+        };
+      };
+    };
+  });
 }

@@ -39,7 +39,7 @@ function initText (textId) {
             console.log(start.place);
             console.log(end.place);
             getRoute(start.place.geometry.location, end.place.geometry.location, function (route) {
-                
+
                 // var directionsDisplay = new google.maps.DirectionsRenderer();
                 // directionsDisplay.setMap(gMap);
                 // directionsDisplay.setDirections(route);
