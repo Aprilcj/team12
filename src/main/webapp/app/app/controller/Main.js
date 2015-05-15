@@ -23,7 +23,7 @@ Ext.define('MyMapApp.controller.Main', {
             },
             
             plan_bus:{
-            	//tap: 'showBusRoute'
+            	// tap: 'showBusRoute'
             },
             
             plan:{
@@ -61,10 +61,18 @@ Ext.define('MyMapApp.controller.Main', {
     		title:"Forbes Ave Opp Hamburg Hall"
     	});
     	
+    	var bus_stop3 = new google.maps.Marker({
+    		position: new google.maps.LatLng (40.444494, -79.942563),
+    		icon:"/mobile/images/favorite.png",
+    		title:"CMU"
+    	});
+    	
     	bus_stop1.setMap(gMap);
     	bus_stop2.setMap(gMap);
+    	bus_stop3.setMap(gMap);
     	stopMarkers[0] = bus_stop1;
     	stopMarkers[1] = bus_stop2;
+    	stopMarkers[2] = bus_stop3;
     	
     	google.maps.event.addListener(bus_stop1, 'click', function() {    		
     		controller.renewBuses(1);
@@ -73,6 +81,9 @@ Ext.define('MyMapApp.controller.Main', {
     	google.maps.event.addListener(bus_stop2, 'click', function() {    		
     		controller.renewBuses(2);
 		});
+    	google.maps.event.addListener(bus_stop3, 'click', function() {    		
+    		controller.renewBuses(3);
+    	});
     	    	
     	this.getMain().setActiveItem(2);
     },
@@ -209,7 +220,73 @@ Ext.define('MyMapApp.controller.Main', {
     		favPanel.add(button7);
     		favPanel.add(button8 );
     		
+    	} else if (number == 3) {
+    		var panel1 = new Ext.Panel({
+    			layout: 'hbox',
+    			cls: 'info_panel',
+            
+	            items:[
+	                {
+	                    xtype: 'label',
+	                    cls: 'stop_info',
+	                    html: 'Favorite Stop: CMU'
+	                },
+	
+	                {
+	                    xtype: 'button',
+	                    cls: 'change_stop_button',
+	                    html: 'Change the Stop',
+	                    attr: 'change_stop'	
+	                }
+	            ]
+    		});
+    		
+    		var button1 = new Ext.Button({
+    			 cls: 'bus_list_element',
+	            attr: 'bus_info',
+	            html: '<span class="bus_info"> <div class="bus_number">67</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 5 minutes</span>',
+    		});
+    		
+    		var button2 = new Ext.Button({
+    			 cls: 'bus_list_element',
+	            attr: 'bus_info',
+	            html: '<span class="bus_info"> <div class="bus_number">69</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 15 minutes</span>',
+    		});
+    		    		
+    		var button3 = new Ext.Button({
+    			 cls: 'bus_list_element',
+	            attr: 'bus_info',
+	            html: '<span class="bus_info"> <div class="bus_number">61A</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 13 minutes</span>',
+    		});
+    		    		    		
+    		var button4 = new Ext.Button({
+    			 cls: 'bus_list_element',
+	            attr: 'bus_info',
+	            html: '<span class="bus_info"> <div class="bus_number">61B</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 7 minutes</span>',
+    		});
+    		
+    		var button5 = new Ext.Button({
+    			 cls: 'bus_list_element',
+	            attr: 'bus_info',
+	            html: '<span class="bus_info"> <div class="bus_number">61C</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 7 minutes</span>',
+    		});
+    		    		
+    		var button6 = new Ext.Button({
+    			 cls: 'bus_list_element',
+	            attr: 'bus_info',
+	            html: '<span class="bus_info"> <div class="bus_number">61D</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 7 minutes</span>',
+    		});
+    		
+    		favPanel.add(panel1);
+    		favPanel.add(button1);
+    		favPanel.add(button2);
+    		favPanel.add(button3);
+    		favPanel.add(button4);
+    		favPanel.add(button5);
+    		favPanel.add(button6);
+
     	}
+    	
     	
     	this.getMain().setActiveItem(0);
     },
