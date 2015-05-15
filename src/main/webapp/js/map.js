@@ -60,8 +60,8 @@ function getRoutes(origin, destination, callback) {
 }
 
 function getFirstTransitStep(routes, routeIndex){
-  for (var i = 0; i < routes.routes[0].legs[0].steps.length; i++) {
-    if (routes.routes[0].legs[0].steps[i].travel_mode == google.maps.TravelMode.TRANSIT) {
+  for (var i = 0; i < routes.routes[routeIndex].legs[0].steps.length; i++) {
+    if (routes.routes[routeIndex].legs[0].steps[i].travel_mode == google.maps.TravelMode.TRANSIT) {
       console.log("getFirstTransitStep:" + i);
       return getStep(routes, i);
     };
@@ -334,10 +334,10 @@ function getNearByStop(origin, map, callback) {
 }
 
 function showNthRoute (routes, routeIndex, map) {
-  var directionsDisplay = new google.maps.DirectionsRenderer();
-  directionsDisplay.setMap(map);
+  directionsDisplay.setMap(null);
   directionsDisplay.setRouteIndex(routeIndex);
   directionsDisplay.setDirections(routes);
+  directionsDisplay.setMap(map);
 
   var step = getFirstTransitStep(routes, routeIndex);
   getStops(step, function (stops) {

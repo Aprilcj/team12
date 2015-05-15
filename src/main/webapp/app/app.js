@@ -54,6 +54,7 @@ Ext.application({
         groutes = null;
         stopMarkers = [];
         vehicleMarkers = [];
+        directionsDisplay = new google.maps.DirectionsRenderer();
         // Initialize the main view
         Ext.Viewport.add(Ext.create('MyMapApp.view.Main'));
     },
