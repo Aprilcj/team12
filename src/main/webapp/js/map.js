@@ -1,3 +1,4 @@
+var directionsService = new google.maps.DirectionsService();
 function getRoute(origin, destination, callback) {
   var request = {
     origin: origin,
@@ -307,5 +308,21 @@ function getVehicleLocation (patterns, vid, callback) {
         };
       };
     };
+  });
+}
+
+function getNearByStop(origin, map, callback) {
+  var request = {
+    location: origin,
+    radius: 2500,
+    types: ['bus_station']
+  };
+  var service = new google.maps.places.PlacesService(map);
+  service.search(request, function(response, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      console.log("nearby station");
+      console.log(response);
+      callback(response);
+    }
   });
 }
