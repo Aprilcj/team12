@@ -9,11 +9,11 @@ Ext.define('MyMapApp.view.Plan', {
         items: [
             {
                 name: 'start',
-                html: "start: <input id='start_input' type='text'> </input>",
+                html: "<div class='input_box'> <div class='input_title'>start </div> <input class='input_field' id='start_input' type='text'> </input> </div>"
             },
             {
                 name: 'end',
-                html: "end: <input id='end_input' type='text'> </input>"
+                html: "<div class='input_box'> <div class='input_title'>end   </div> <input class='input_field' id='end_input' type='text'> </input>  </div>"
             }
         ]
     },
