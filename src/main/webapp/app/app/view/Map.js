@@ -10,7 +10,7 @@ Ext.define('MyMapApp.view.Map', {
              mapTypeId: google.maps.MapTypeId.ROADMAP,
              zoom: 15
          },
-
+         
     },
     
 
