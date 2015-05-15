@@ -48,6 +48,8 @@ Ext.application({
     launch: function() {
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
+        
+        controller = this.getController('Main');
 
         // Initialize the main view
         Ext.Viewport.add(Ext.create('MyMapApp.view.Main'));
