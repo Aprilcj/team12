@@ -51,6 +51,7 @@ Ext.application({
         
         controller = this.getController('Main');
 
+        groutes = null;
         // Initialize the main view
         Ext.Viewport.add(Ext.create('MyMapApp.view.Main'));
     },
