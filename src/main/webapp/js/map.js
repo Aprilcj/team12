@@ -1,4 +1,5 @@
 var directionsService = new google.maps.DirectionsService();
+
 function getRoute(origin, destination, callback) {
   var request = {
     origin: origin,
@@ -31,6 +32,7 @@ function getRoutes(origin, destination, callback) {
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       var result =[];
+      var resultSet = {};
       for(var i = 0; i < response.routes.length; i++){
         var lines = "";
         for(var j = 0; j < response.routes[i].legs[0].steps.length; j++){
@@ -42,9 +44,9 @@ function getRoutes(origin, destination, callback) {
             }
           }
         }
-        if(!result[lines]){
+        if(!resultSet[lines]){
           result[i] = lines;
-          result[lines] = true;
+          resultSet[lines] = true;
         }
         console.log(lines);
       }
@@ -55,13 +57,12 @@ function getRoutes(origin, destination, callback) {
   });
 }
 
-function getFirstTransitStep(route){
-  for (var i = 0; i < route.routes[0].legs[0].steps.length; i++) {
-    if (route.routes[0].legs[0].steps[i].travel_mode == google.maps.TravelMode.TRANSIT) {
+function getFirstTransitStep(routes, routeIndex){
+  for (var i = 0; i < routes.routes[0].legs[0].steps.length; i++) {
+    if (routes.routes[0].legs[0].steps[i].travel_mode == google.maps.TravelMode.TRANSIT) {
       console.log("getFirstTransitStep:" + i);
-      return getStep(route, i);
+      return getStep(routes, i);
     };
-    
   };
 }
 
@@ -325,4 +326,11 @@ function getNearByStop(origin, map, callback) {
       callback(response);
     }
   });
+}
+
+function showRouteDetail (routes, routeIndex, map) {
+  var directionsDisplay = new google.maps.DirectionsRenderer();
+  directionsDisplay.setMap(map);
+
+
 }
