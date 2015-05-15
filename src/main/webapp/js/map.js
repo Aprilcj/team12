@@ -63,13 +63,13 @@ function getFirstTransitStep(routes, routeIndex){
   for (var i = 0; i < routes.routes[routeIndex].legs[0].steps.length; i++) {
     if (routes.routes[routeIndex].legs[0].steps[i].travel_mode == google.maps.TravelMode.TRANSIT) {
       console.log("getFirstTransitStep:" + i);
-      return getStep(routes, i);
+      return getStep(routes, routeIndex, i);
     };
   };
 }
 
-function getStep(route, stepIndex) {
-  var step = route.routes[0].legs[0].steps[stepIndex];
+function getStep(route, routeIndex, stepIndex) {
+  var step = route.routes[routeIndex].legs[0].steps[stepIndex];
   if (step.travel_mode == google.maps.TravelMode.TRANSIT) {
     step.rt = step.transit.line.short_name;
     step.direction = getDirection(step);
@@ -148,6 +148,7 @@ function getVehicle (step, callback) {
     var patterns = JSON.parse(response)["bustime-response"].ptr;
     console.log("patterns:")
     console.log(patterns);
+    patterns = makeArray(patterns);
     patterns = filterPattern(patterns, step);
     
     httpGet("/mobile/bus/vehicles?rt="+step.rt, function (response) {
@@ -335,10 +336,12 @@ function getNearByStop(origin, map, callback) {
 
 function showNthRoute (routes, routeIndex, map) {
   directionsDisplay.setMap(null);
-  directionsDisplay.setRouteIndex(routeIndex);
-  directionsDisplay.setDirections(routes);
   directionsDisplay.setMap(map);
+  directionsDisplay.setDirections(routes);
+  directionsDisplay.setRouteIndex(routeIndex);
 
+  console.log("routes");
+  console.log(routes);
   var step = getFirstTransitStep(routes, routeIndex);
   getStops(step, function (stops) {
     for (var i = 0; i < stopMarkers.length; i++) {
