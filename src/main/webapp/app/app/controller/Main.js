@@ -12,6 +12,7 @@ Ext.define('MyMapApp.controller.Main', {
         refs: {
             main: 'main',
             fav: 'myfav',
+            plan: 'plan',
             fav_bus: 'myfav button[attr=bus_info]',
             plan_bus: 'plan button[attr=bus_info]',
             change_stop: 'myfav button[attr=change_stop]'
@@ -22,7 +23,11 @@ Ext.define('MyMapApp.controller.Main', {
             },
             
             plan_bus:{
-            	tap: 'showBusRoute'
+            	//tap: 'showBusRoute'
+            },
+            
+            plan:{
+            	plan_chosen_event: 'showPlan'
             },
         	
             change_stop: {
@@ -38,6 +43,7 @@ Ext.define('MyMapApp.controller.Main', {
         console.log("button: " + this.getChange_stop());
         
         stopMarkers = [];
+        vehicleMarkers = [];
     },
 
     showStops: function() {
@@ -210,6 +216,9 @@ Ext.define('MyMapApp.controller.Main', {
     	this.getMain().setActiveItem(0);
     },
 
+    showPlan: function(id) {
+    	console.log(groutes + ", id: " + id);
+    },
 
     showBusRoute: function(e, t) {
     	var bus_number = t.getTarget().innerText.split(/\s/)[0];
@@ -235,6 +244,12 @@ Ext.define('MyMapApp.controller.Main', {
             stopMarkers[stopMarkers.length-1].setMap(gMap);
           };
         });
+
+        this.getMain().setActiveItem(2);
+    },    
+
+    showRouteSolution: function(e, t) {
+    	
 
         this.getMain().setActiveItem(2);
     },

@@ -97,7 +97,11 @@ function calcRoute() {
       vehicleMarkers = [];
       vehicleMarkers[vehicleMarkers.length] = new google.maps.Marker({
           position: vehicle.latLng,
-          icon: "images/red-dot.png",
+          icon: {
+            path: "/mobile/images/arrow.png",
+            scale: 1,
+            rotation: 90
+          },
           title:vehicle.rt
       });
       vehicleMarkers[vehicleMarkers.length-1].setMap(map);

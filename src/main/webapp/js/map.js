@@ -31,6 +31,8 @@ function getRoutes(origin, destination, callback) {
   };
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
+      console.log('response');
+      console.log(response);
       var result =[];
       var resultSet = {};
       for(var i = 0; i < response.routes.length; i++){
@@ -45,13 +47,13 @@ function getRoutes(origin, destination, callback) {
           }
         }
         if(!resultSet[lines]){
-          result[i] = lines;
+          response.routes[i].info = lines;
           resultSet[lines] = true;
         }
         console.log(lines);
       }
       if (callback){
-        callback(result);
+        callback(response);
       }
     }
   });
@@ -328,9 +330,38 @@ function getNearByStop(origin, map, callback) {
   });
 }
 
-function showRouteDetail (routes, routeIndex, map) {
+function showNthRoute (routes, routeIndex, map) {
   var directionsDisplay = new google.maps.DirectionsRenderer();
   directionsDisplay.setMap(map);
+  directionsDisplay.setRouteIndex(routeIndex);
+  directionsDisplay.setDirections(route);
 
+  var step = getFirstTransitStep(routes, routeIndex);
+  getStops(step, function (stops) {
+    for (var i = 0; i < stopMarkers.length; i++) {
+      stopMarkers[i].setMap(null);
+    };
+    stopMarkers = [];
+    for (var i = 0; i < stops.length; i++) {
+      stopMarkers[stopMarkers.length] = new google.maps.Marker({
+          position: stops[i].latLng,
+          icon:"/mobile/images/black-dot.png",
+          title:stops[i].stpnm
+      });
+      stopMarkers[stopMarkers.length-1].setMap(map);
+    };
+  });
 
+  getVehicle(step, function(vehicle){
+    for (var i = 0; i < vehicleMarkers.length; i++) {
+      vehicleMarkers[i].setMap(null);
+    };
+    vehicleMarkers = [];
+    vehicleMarkers[vehicleMarkers.length] = new google.maps.Marker({
+        position: vehicle.latLng,
+        icon: "images/red-dot.png",
+        title:vehicle.rt
+    });
+    vehicleMarkers[vehicleMarkers.length-1].setMap(map);
+  });
 }
