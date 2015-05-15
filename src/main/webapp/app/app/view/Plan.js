@@ -38,10 +38,15 @@ function initText (textId) {
         var start =  document.getElementById('start_input');
         var end = document.getElementById('end_input');
         if (start.place && end.place) {
+        	 planPanel = Ext.getCmp('plan');
             console.log(start.place);
             console.log(end.place);
-            getRoutes(start.place.geometry.location, end.place.geometry.location, function (routes) {
-            	var planPanel = Ext.getCmp('plan');
+            
+            for (var i = 2; i < planPanel.items.length; i++) {
+            	planPanel.remove(planPanel.items.get(i), true);
+            }
+
+            getRoutes(start.place.geometry.location, end.place.geometry.location, function (routes) {  
             	groutes = routes;
                 for (var i = 0; i < routes.routes.length; i++) {
                     if (!routes.routes[i].info) {
@@ -55,7 +60,7 @@ function initText (textId) {
 	       	            attr: 'bus_info',
 	       	            html: '<span class="bus_info"> <div class="bus_number">' + routes.routes[i].info 
                         + '</div> <div class="bus_type">inbound</div></span> <span class="minutes"> '
-                        + step.transit.departure_time.text + '</span>',
+                        + "Arrival Time: " + step.transit.departure_time.text + '</span>',
             		});
             		
             		button.addListener('tap', function(){

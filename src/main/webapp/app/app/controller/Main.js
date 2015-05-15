@@ -315,7 +315,7 @@ Ext.define('MyMapApp.controller.Main', {
           for (var i = 0; i < stops.length; i++) {
             stopMarkers[stopMarkers.length] = new google.maps.Marker({
                 position: stops[i].latLng,
-                icon:"/mobile/images/black-dot.png",
+                icon:"/mobile/images/bus_stop.png",
                 title:stops[i].stpnm
             });
             stopMarkers[stopMarkers.length-1].setMap(gMap);
