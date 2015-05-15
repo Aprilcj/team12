@@ -16,6 +16,44 @@ function getRoute(origin, destination, callback) {
   });
 }
 
+
+function getRoutes(origin, destination, callback) {
+  var request = {
+    origin: origin,
+    destination: destination,
+    provideRouteAlternatives: true,
+    travelMode: google.maps.TravelMode.TRANSIT,
+    transitOptions: {
+      modes: [google.maps.TransitMode.BUS]
+    }
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      var result =[];
+      for(var i = 0; i < response.routes.length; i++){
+        var lines = "";
+        for(var j = 0; j < response.routes[i].legs[0].steps.length; j++){
+          if(response.routes[i].legs[0].steps[j].travel_mode == "TRANSIT"){
+            if(lines.length == 0){
+              lines = response.routes[i].legs[0].steps[j].transit.line.short_name;
+            } else {
+              lines = lines + "->" + response.routes[i].legs[0].steps[j].transit.line.short_name;;
+            }
+          }
+        }
+        if(!result[lines]){
+          result[i] = lines;
+          result[lines] = true;
+        }
+        console.log(lines);
+      }
+      if (callback){
+        callback(result);
+      }
+    }
+  });
+}
+
 function getFirstTransitStep(route){
   for (var i = 0; i < route.routes[0].legs[0].steps.length; i++) {
     if (route.routes[0].legs[0].steps[i].travel_mode == google.maps.TravelMode.TRANSIT) {
