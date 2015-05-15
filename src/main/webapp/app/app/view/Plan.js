@@ -15,12 +15,6 @@ Ext.define('MyMapApp.view.Plan', {
             },
             {
                 name: ''
-            },
-            {
-                xtype: 'button',
-                cls: 'bus_list_element',
-                attr: 'route_info',
-                html: '<span class="route_info"> <div class="bus_number">71D</div></span>',
             }
         ]
     },
