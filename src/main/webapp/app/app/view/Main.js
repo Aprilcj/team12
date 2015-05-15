@@ -13,14 +13,14 @@ Ext.define('MyMapApp.view.Main', {
         items: [
             {
                 xtype: 'container',
-                title: 'Favorites',
+                title: 'Schedule',
                 iconCls: 'favorites',
 
                 items: [
                     {
                         docked: 'top',
                         xtype: 'titlebar',
-                        title: 'My Favorite routes'
+                        title: 'Bus Schedule'
                     },
                     {
                         xtype: 'myfav',

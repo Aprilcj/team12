@@ -12,12 +12,17 @@ Ext.define('MyMapApp.controller.Main', {
         refs: {
             main: 'main',
             fav: 'myfav',
-            test: 'myfav button[attr=bus_info]',
+            fav_bus: 'myfav button[attr=bus_info]',
+            plan_bus: 'plan button[attr=bus_info]',
             change_stop: 'myfav button[attr=change_stop]'
         },
         control: {
-            test: {
+        	fav_bus: {
                 tap: 'showBusRoute'
+            },
+            
+            plan_bus:{
+            	tap: 'showBusRoute'
             },
         	
             change_stop: {

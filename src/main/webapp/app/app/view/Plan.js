@@ -2,8 +2,10 @@ Ext.define('MyMapApp.view.Plan', {
     extend: 'Ext.form.Panel',
     fullscreen: true,
     alias: 'widget.plan',
+    id: 'plan',
 
     config: {
+		layout: 'vbox',
         items: [
             {
                 name: 'start',
@@ -12,9 +14,6 @@ Ext.define('MyMapApp.view.Plan', {
             {
                 name: 'end',
                 html: "end: <input id='end_input' type='text'> </input>"
-            },
-            {
-                name: ''
             }
         ]
     },
@@ -42,8 +41,16 @@ function initText (textId) {
             console.log(start.place);
             console.log(end.place);
             getRoutes(start.place.geometry.location, end.place.geometry.location, function (routes) {
+            	var planPanel = Ext.getCmp('plan');
                 for (var i = 0; i < routes.length; i++) {
-                    console.log(routes[i]);
+                	console.log("No." + i +": " + routes[i]);
+            		var button = new Ext.Button({
+	           			cls: 'bus_list_element',
+	       	            attr: 'bus_info',
+	       	            html: '<span class="bus_info"> <div class="bus_number">' + routes[i] + '</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 5 minutes</span>',
+            		});
+                    planPanel.add(button);
+                    
                 };
             });
         };
