@@ -52,13 +52,13 @@ Ext.define('MyMapApp.controller.Main', {
     	var bus_stop1 = new google.maps.Marker({
     		position: new google.maps.LatLng (40.443765, -79.938616),
     		icon:"/mobile/images/icon_borderedbus.png",
-    		title:"Forbes Ave at Beeler St"
+    		title:"Forbes at Beeler"
     	});
     	
     	var bus_stop2 = new google.maps.Marker({
     		position: new google.maps.LatLng (40.444598, -79.945922),
     		icon:"/mobile/images/icon_borderedbus.png",
-    		title:"Forbes Ave Opp Hamburg Hall"
+    		title:"Forbes Opp Hamburg"
     	});
     	
     	var bus_stop3 = new google.maps.Marker({

@@ -19,6 +19,10 @@ Ext.application({
 
     controllers: ['Main'
     ],
+    
+    viewport: {
+      autoBlurInput: false
+    },
 
     views: [
         'Main',
