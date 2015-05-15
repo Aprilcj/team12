@@ -42,8 +42,6 @@ Ext.define('MyMapApp.controller.Main', {
         console.log("controller up");
         console.log("button: " + this.getChange_stop());
         
-        stopMarkers = [];
-        vehicleMarkers = [];
     },
 
     showStops: function() {
@@ -216,8 +214,10 @@ Ext.define('MyMapApp.controller.Main', {
     	this.getMain().setActiveItem(0);
     },
 
-    showPlan: function(id) {
-    	console.log(groutes + ", id: " + id);
+    showPlan: function(index) {
+    	console.log(groutes + ", index: " + index);
+        showNthRoute(groutes, index, gMap);
+        this.getMain().setActiveItem(2);
     },
 
     showBusRoute: function(e, t) {

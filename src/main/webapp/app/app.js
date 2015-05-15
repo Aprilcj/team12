@@ -52,6 +52,8 @@ Ext.application({
         controller = this.getController('Main');
 
         groutes = null;
+        stopMarkers = [];
+        vehicleMarkers = [];
         // Initialize the main view
         Ext.Viewport.add(Ext.create('MyMapApp.view.Main'));
     },

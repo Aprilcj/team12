@@ -43,18 +43,23 @@ function initText (textId) {
             getRoutes(start.place.geometry.location, end.place.geometry.location, function (routes) {
             	var planPanel = Ext.getCmp('plan');
             	groutes = routes;
-                for (var i = 0; i < routes.length; i++) {
-                	console.log("No." + i +": " + routes[i]);
-                	var button_id = 'button_' + i;
+                for (var i = 0; i < routes.routes.length; i++) {
+                    if (!routes.routes[i].info) {
+                        continue;
+                    };
+                	console.log("No." + i +": " + routes.routes[i].info);
+                    var step = getFirstTransitStep(routes, i);
             		var button = new Ext.Button({
 	           			cls: 'bus_list_element',
-	           			id: button_id,
+	           			index: i,
 	       	            attr: 'bus_info',
-	       	            html: '<span class="bus_info"> <div class="bus_number">' + routes[i] + '</div> <div class="bus_type">inbound</div></span> <span class="minutes"> in 5 minutes</span>',
+	       	            html: '<span class="bus_info"> <div class="bus_number">' + routes.routes[i].info 
+                        + '</div> <div class="bus_type">inbound</div></span> <span class="minutes"> '
+                        + step.transit.departure_time.text + '</span>',
             		});
             		
             		button.addListener('tap', function(){
-            			button.parent.fireEvent('plan_chosen_event', this.id);
+            			button.parent.fireEvent('plan_chosen_event', this.index);
             			console.log('fire event');
             		});
                     planPanel.add(button);

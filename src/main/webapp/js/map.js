@@ -134,6 +134,8 @@ function getVehicles (step, callback) {
       console.log(vehicles);
 
       vehicles = vehiclesMatched(vehicles, patterns);
+      console.log('vehicles');
+      console.log(vehicles);
       if (callback) {
         callback(vehicles);
       };
@@ -154,6 +156,8 @@ function getVehicle (step, callback) {
       console.log(vehicles);
 
       var vehicle = nearestVehicle(vehicles, patterns);
+      console.log('vehicles');
+      console.log(vehicles);
       if (callback) {
         callback(vehicle);
       };
@@ -180,32 +184,31 @@ function vehiclesMatched (vehicles, patterns) {
 }
 
 function nearestVehicle (vehicles, patterns) {
-  var pids = {};
-  for (var i = 0; i < patterns.length; i++) {
-    pids[patterns[i].pid] = true;
+  if (!vehicles) {
+    return;
   };
-
+  vehicles = makeArray(vehicles);
+  patterns = makeArray(patterns);
   var nearestVehicle;
   var minDistance;
-  for (var i = 0; i < vehicles.length; i++) {
-    for (var j = 0; j < patterns.length; j++) {
-      if (patterns[j].pid == vehicles[i].pid) {
-        if (!patterns[j].departIndex) {
-          break;
-        };
-        var distance =  patterns[j].pt[patterns[j].departIndex].pdist - vehicles[i].pdist;
-        if (distance < 0) {
-          continue;
+    for (var i = 0; i < vehicles.length; i++) {
+      console.log("vehicles[i].pdist = " + vehicles[i].pdist);
+      for (var j = 0; j < patterns.length; j++) {
+        if (patterns[j].pid == vehicles[i].pid) {
+          var distance =  patterns[j].pt[patterns[j].departIndex].pdist - vehicles[i].pdist;
+          console.log("distance = " + distance);
+          if (distance < 0) {
+            continue;
+          }
+          console.log("distance = " + distance + ", minDistance = " + minDistance);
+          if (!minDistance || distance < minDistance) {
+            minDistance = distance;
+            nearestVehicle = vehicles[i];
+            nearestVehicle.latLng = new google.maps.LatLng(nearestVehicle.lat, nearestVehicle.lon);
+          };
         }
-        console.log("distance = " + distance + ", minDistance = " + minDistance);
-        if (!minDistance || distance < minDistance) {
-          minDistance = distance;
-          nearestVehicle = vehicles[i];
-          nearestVehicle.latLng = new google.maps.LatLng(nearestVehicle.lat, nearestVehicle.lon);
-        };
       };
-    };
-  };
+    }
   console.log("nearestVehicle:");
   console.log(nearestVehicle);
   return nearestVehicle;
@@ -334,7 +337,7 @@ function showNthRoute (routes, routeIndex, map) {
   var directionsDisplay = new google.maps.DirectionsRenderer();
   directionsDisplay.setMap(map);
   directionsDisplay.setRouteIndex(routeIndex);
-  directionsDisplay.setDirections(route);
+  directionsDisplay.setDirections(routes);
 
   var step = getFirstTransitStep(routes, routeIndex);
   getStops(step, function (stops) {
@@ -353,15 +356,27 @@ function showNthRoute (routes, routeIndex, map) {
   });
 
   getVehicle(step, function(vehicle){
-    for (var i = 0; i < vehicleMarkers.length; i++) {
-      vehicleMarkers[i].setMap(null);
+    if (vehicle) {
+      for (var i = 0; i < vehicleMarkers.length; i++) {
+        vehicleMarkers[i].setMap(null);
+      };
+      vehicleMarkers = [];
+      vehicleMarkers[vehicleMarkers.length] = new google.maps.Marker({
+          position: vehicle.latLng,
+          icon: "/mobile/images/arrow.png",
+          title:vehicle.rt
+      });
+      vehicleMarkers[vehicleMarkers.length-1].setMap(map);
     };
-    vehicleMarkers = [];
-    vehicleMarkers[vehicleMarkers.length] = new google.maps.Marker({
-        position: vehicle.latLng,
-        icon: "images/red-dot.png",
-        title:vehicle.rt
-    });
-    vehicleMarkers[vehicleMarkers.length-1].setMap(map);
   });
+}
+
+function makeArray (object) {
+  if (object.length) {
+    return object;
+  }else{
+    var newObject = [];
+    newObject.push(object);
+    return newObject;
+  }
 }
